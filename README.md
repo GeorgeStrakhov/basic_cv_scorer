@@ -9,6 +9,7 @@ This system automatically scores CVs/resumes using AI, evaluating them on creati
 - [Usage](#usage)
 - [Understanding Results](#understanding-results)
 - [Troubleshooting](#troubleshooting)
+- [Customizing Scoring Criteria](#customizing-scoring-criteria)
 
 ## Prerequisites Installation
 
@@ -169,3 +170,86 @@ If you encounter any issues:
 - Make regular backups of your output folder
 
 For technical users: The system uses OpenAI's GPT-4 model for analysis and can be customized by modifying the scoring criteria in `scoring_config.py`.
+
+## Customizing Scoring Criteria
+
+You can customize how CVs are scored by modifying the `scoring_config.py` file. Each scoring criterion has:
+- A name
+- Minimum and maximum scores
+- Description
+- Required aspects to evaluate
+
+### How to Modify Scoring Criteria
+
+1. Open `scoring_config.py` in a text editor
+2. Find the `criteria` dictionary in the `ScoringConfig` class
+3. Modify existing criteria or add new ones using this format:
+
+```python
+"criterion_key": ScoringCriterion(
+    name="Display Name",
+    min_score=0,
+    max_score=10,
+    description="Description of what to evaluate",
+    required_aspects=["aspect1", "aspect2", "aspect3"]
+)
+```
+
+### Examples
+
+1. **Technical Skills Criterion**:
+```python
+"technical_skills": ScoringCriterion(
+    name="Technical Skills",
+    min_score=0,
+    max_score=10,
+    description="Evaluation of programming languages and technical tools proficiency",
+    required_aspects=["programming_languages", "tools", "frameworks", "recent_tech"]
+)
+```
+
+2. **Leadership Criterion**:
+```python
+"leadership": ScoringCriterion(
+    name="Leadership",
+    min_score=0,
+    max_score=5,
+    description="Assessment of leadership and team management experience",
+    required_aspects=["team_size", "project_ownership", "mentorship"]
+)
+```
+
+3. **Communication Skills**:
+```python
+"communication": ScoringCriterion(
+    name="Communication",
+    min_score=1,
+    max_score=8,
+    description="Evaluation of written and verbal communication abilities",
+    required_aspects=["clarity", "presentation_skills", "documentation"]
+)
+```
+
+### Tips for Creating Criteria
+
+1. **Scoring Range**: 
+   - Choose appropriate min/max scores (e.g., 0-10, 1-5)
+   - Consider using different ranges for different criteria based on importance
+
+2. **Required Aspects**:
+   - List specific elements to evaluate
+   - Keep aspects clear and measurable
+   - Use 3-5 aspects per criterion for balanced evaluation
+
+3. **Descriptions**:
+   - Be specific about what should be evaluated
+   - Include any special considerations
+   - Make it clear for consistent scoring
+
+### After Making Changes
+
+1. Save the `scoring_config.py` file
+2. Restart the CV scoring system if it's running
+3. New criteria will be applied to all subsequent CV evaluations
+
+Note: Previously scored CVs won't be automatically rescored with new criteria. You'll need to delete them from the output file if you want to rescore them.
